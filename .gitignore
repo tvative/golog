@@ -2,3 +2,7 @@
 
 .idea/
 .run/
+
+# Ignore Files
+
+*.log
