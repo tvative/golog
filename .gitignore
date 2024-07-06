@@ -1,0 +1,8 @@
+# Ignore Directories
+
+.idea/
+.run/
+
+# Ignore Files
+
+*.log
