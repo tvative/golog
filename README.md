@@ -47,19 +47,42 @@ func main() {
 	// Set log file destination
 	logFilePath := "application"
 	logger.SetFileOutput(logFilePath)
-	logger.SetTerminalOutput(false)
+	logger.SetTerminalOutput(true)
 
 	// Set log formats
 	logger.SetFileFormat(golog.JSONFormat)
-	logger.SetTerminalFormat(golog.JSONFormat)
+	logger.SetTerminalFormat(golog.ReadableFormat)
 
 	// Set log rotation
 	logger.SetLogRotateByCount(10)
 
 	// Log messages
-	logger.Log(golog.NormalLog, map[string]any{"user": "Alice"}, "This is an info message", "another content")
+	logger.Log(golog.NormalLog, map[string]any{"user": "Alice"}, "User login attempt", "Login attempt successful for user: Alice")
+	logger.Log(golog.ErrorLog, map[string]any{"error": "file not found", "path": "/var/www/html/index.html"}, "File not found error", "Attempt to access non-existent file: /var/www/html/index.html")
+	logger.Log(golog.SuccessLog, map[string]any{"transaction": "TX12345", "amount": 150.75}, "Transaction successful", "Transaction ID TX12345 completed successfully with amount $150.75")
+	logger.Log(golog.WarningLog, map[string]any{"memory": "low", "server_id": "srv-01"}, "Low memory warning", "Server srv-01 is experiencing low memory conditions")
+	logger.Log(golog.DebugLog, map[string]any{"details": "request processing", "request_id": "req-67890"}, "Debugging request", "Processing request ID req-67890 for debugging purposes")
 }
+```
 
+**File Output:**
+
+```json
+{"ID":"1720245990408132641","Level":"LOG","Time":"2024-07-06 11:36:30:408:408136394","Message":"User login attempt Login attempt successful for user: Alice","Additional":{"user":"Alice"}}
+{"ID":"1720245990408465947","Level":"ERR","Time":"2024-07-06 11:36:30:408:408468440","Message":"File not found error Attempt to access non-existent file: /var/www/html/index.html","Additional":{"error":"file not found","path":"/var/www/html/index.html"}}
+{"ID":"1720245990408550091","Level":"SUC","Time":"2024-07-06 11:36:30:408:408551195","Message":"Transaction successful Transaction ID TX12345 completed successfully with amount $150.75","Additional":{"amount":150.75,"transaction":"TX12345"}}
+{"ID":"1720245990408598067","Level":"WRR","Time":"2024-07-06 11:36:30:408:408599492","Message":"Low memory warning Server srv-01 is experiencing low memory conditions","Additional":{"memory":"low","server_id":"srv-01"}}
+{"ID":"1720245990408645649","Level":"DEB","Time":"2024-07-06 11:36:30:408:408646453","Message":"Debugging request Processing request ID req-67890 for debugging purposes","Additional":{"details":"request processing","request_id":"req-67890"}}
+```
+
+**Terminal Output:**
+
+```json
+2024-07-06 11:36:30:408:408136394 [ LOG ] User login attempt Login attempt successful for user: Alice {"user":"Alice"}
+2024-07-06 11:36:30:408:408468440 [ ERR ] File not found error Attempt to access non-existent file: /var/www/html/index.html {"error":"file not found","path":"/var/www/html/index.html"}
+2024-07-06 11:36:30:408:408551195 [ SUC ] Transaction successful Transaction ID TX12345 completed successfully with amount $150.75 {"amount":150.75,"transaction":"TX12345"}
+2024-07-06 11:36:30:408:408599492 [ WRR ] Low memory warning Server srv-01 is experiencing low memory conditions {"memory":"low","server_id":"srv-01"}
+2024-07-06 11:36:30:408:408646453 [ DEB ] Debugging request Processing request ID req-67890 for debugging purposes {"details":"request processing","request_id":"req-67890"}
 ```
 
 ### Example
