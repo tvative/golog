@@ -77,7 +77,7 @@ func main() {
 
 **Terminal Output:**
 
-```json
+```plaintext
 2024-07-06 11:36:30:408:408136394 [ LOG ] User login attempt Login attempt successful for user: Alice {"user":"Alice"}
 2024-07-06 11:36:30:408:408468440 [ ERR ] File not found error Attempt to access non-existent file: /var/www/html/index.html {"error":"file not found","path":"/var/www/html/index.html"}
 2024-07-06 11:36:30:408:408551195 [ SUC ] Transaction successful Transaction ID TX12345 completed successfully with amount $150.75 {"amount":150.75,"transaction":"TX12345"}
