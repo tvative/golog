@@ -81,7 +81,7 @@ func retJSON(log Logs) string {
 }
 
 func (c *Config) dumpTerminal(log Logs) {
-	switch c.TerminalFormat {
+	switch c.terminalFormat {
 	case JSONFormat:
 		fmt.Println(retJSON(log))
 	case ReadableFormat:
@@ -91,29 +91,23 @@ func (c *Config) dumpTerminal(log Logs) {
 	}
 }
 
-func (c *Config) dumpFile() {
-	for log := range c.logChannel {
-		c.mu.Lock()
+func (c *Config) dumpFile(log Logs) {
+	c.logRotateByCount()
 
-		var content string
-		switch c.FileFormat {
-		case JSONFormat:
-			content = retJSON(log)
-		case ReadableFormat:
-			content = retReadable(log, false)
-		default:
-			content = retReadable(log, false)
-		}
-
-		if c.Destination != nil {
-			_, err := c.Destination.WriteString(content + "\n")
-			if err != nil {
-				return
-			}
-		}
-
-		c.mu.Unlock()
+	var content string
+	switch c.fileFormat {
+	case JSONFormat:
+		content = retJSON(log)
+	case ReadableFormat:
+		content = retReadable(log, false)
+	default:
+		content = retReadable(log, false)
 	}
 
-	c.doneChannel <- true
+	if c.fileDescriptor != nil {
+		_, err := c.fileDescriptor.WriteString(content + "\n")
+		if err != nil {
+			return
+		}
+	}
 }

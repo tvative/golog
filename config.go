@@ -2,7 +2,6 @@ package golog
 
 import (
 	"os"
-	"sync"
 )
 
 // Format is the format of the log.
@@ -36,10 +35,13 @@ type Logs struct {
 
 // Config is the configuration for the logger.
 type Config struct {
-	Destination    *os.File   // Destination is the file where the log will be written to.
-	FileFormat     Format     // FileFormat is the format of the log file.
-	TerminalFormat Format     // TerminalFormat is the format of the log printed to the terminal.
-	mu             sync.Mutex // Ensures thread-safe writes to the log file.
-	logChannel     chan Logs  // Channel to handle async log writing.
-	doneChannel    chan bool  // Channel to signal log writing completion.
+	fileDestination        string   // fileDestination is the path where the log file will be written to.
+	fileDescriptor         *os.File // fileDescriptor is the file where the log will be written to.
+	fileFormat             Format   // fileFormat is the format of the log file.
+	terminalFormat         Format   // terminalFormat is the format of the log printed to the terminal.
+	isNeedFileOutput       bool     // isNeedFileOutput is the flag to determine if the log needs to be written to the file.
+	isNeedTerminalOutput   bool     // isNeedTerminalOutput is the flag to determine if the log needs to be printed to the terminal.
+	logCount               int64    // logCount is the number of logs.
+	logRotateCount         int64    // logRotateCount is the number of logs before rotating the log file.
+	isNeedLogRotateByCount bool     // isNeedLogRotateByCount is the flag to determine if the log file needs to be rotated.
 }

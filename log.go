@@ -10,6 +10,11 @@ func (c *Config) Log(level LogLevel, additional map[string]any, msg ...any) {
 		Additional: additional,
 	}
 
-	c.dumpTerminal(log)
-	c.logChannel <- log
+	if c.isNeedTerminalOutput {
+		c.dumpTerminal(log)
+	}
+
+	if c.isNeedFileOutput {
+		c.dumpFile(log)
+	}
 }

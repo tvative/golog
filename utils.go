@@ -2,7 +2,6 @@ package golog
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 )
 
@@ -26,9 +25,7 @@ func genTime() string {
 	generatedTimeMillSeconds := getTime.Nanosecond() / 1e6
 	generatedTimeNanoSeconds := getTime.Nanosecond()
 
-	return generateLongTime + ":" +
-		strconv.Itoa(generatedTimeMillSeconds) + ":" +
-		strconv.Itoa(generatedTimeNanoSeconds)
+	return fmt.Sprintf("%s:%d:%d", generateLongTime, generatedTimeMillSeconds, generatedTimeNanoSeconds)
 }
 
 func getColor(level LogLevel) string {
@@ -51,4 +48,13 @@ func getColor(level LogLevel) string {
 	}
 
 	return fmt.Sprintf("%s%s%s", color, level, defaultColor)
+}
+
+func genRotatePostfix() string {
+	getTime := time.Now()
+	generateLongTime := getTime.Format("2006_01_02_15_04_05")
+	generatedTimeMillSeconds := getTime.Nanosecond() / 1e6
+	generatedTimeNanoSeconds := getTime.Nanosecond()
+
+	return fmt.Sprintf("%s_%d_%d", generateLongTime, generatedTimeMillSeconds, generatedTimeNanoSeconds)
 }
